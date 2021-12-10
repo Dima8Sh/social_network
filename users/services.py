@@ -3,6 +3,8 @@ from typing import Dict
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import User
+
 
 
 User = get_user_model()
@@ -25,4 +27,17 @@ def login(*, user_credentials):
     user = authenticate(**user_credentials)
     if not user or not user.is_active:
         return
+    return user
+
+def change_password(*, data: Dict):
+    user = User.objects.get(old_password=data['old password'], password=data['password'], new_password=data['new password'])
+    if user.check_password(data):
+        user.set_password(data)
+        user.save
+    else:
+        raise Exception(
+                {
+                    'old password': 'is incorrect'
+                }
+        )
     return user

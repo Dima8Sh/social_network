@@ -1,3 +1,4 @@
+from typing_extensions import Required
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.decorators import action
@@ -67,4 +68,18 @@ class UserViewSet(viewsets.ModelViewSet):
     def me(self, request):
         response_data = user_serializers.UserDetailSerializer(request.user).data
         return Response(response_data)
+
+    @action(
+        methods=['POST'],
+        detail=False,
+        serializer_class=user_serializers.ChangePasswordSerializer
+    )
+    def change_password(self,request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        user = user_services.change_password(data=data)
+        responce_data = user_serializers.UserDetailSerializer(user).data
+        return Response(responce_data)
+
 
