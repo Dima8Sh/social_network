@@ -1,4 +1,5 @@
 from typing_extensions import Required
+from django.http.response import HttpResponse
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.decorators import action
@@ -78,8 +79,8 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        user = user_services.change_password(data=data)
+        user = user_services.change_password(user=data)
         responce_data = user_serializers.UserDetailSerializer(user).data
-        return Response(responce_data)
+        return HttpResponse("Password changed")
 
 

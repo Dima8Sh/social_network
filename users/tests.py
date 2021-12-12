@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
+import unittest
 
 from core.tests.base_api_test import BaseAPITestCase
 
@@ -53,4 +54,5 @@ class TestUserView(BaseAPITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         json_data = res.json()
         self.assertEqual(self.user_email, json_data['email'])
+
 

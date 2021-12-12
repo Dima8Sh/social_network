@@ -2,6 +2,7 @@ from typing import Dict
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
+from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 
@@ -29,15 +30,14 @@ def login(*, user_credentials):
         return
     return user
 
-def change_password(*, data: Dict):
-    user = User.objects.get(old_password=data['old password'], password=data['password'], new_password=data['new password'])
-    if user.check_password(data):
-        user.set_password(data)
-        user.save
+def change_password(*, user):
+    if user.check_password['old_password']:
+        user.set_password('new_password')
+        user.save()
     else:
-        raise Exception(
+        raise serializers.ValidationError(
                 {
                     'old password': 'is incorrect'
                 }
         )
-    return user
+    return None

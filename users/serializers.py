@@ -48,10 +48,10 @@ class ChangePasswordSerializer(serializers.Serializer):
     new_password_repeat = serializers.CharField(min_length=8, max_length=20)
 
     def validate(self, attrs):
-        if attrs['password'] != attrs['password_repeat']:
+        if attrs['new_password'] != attrs['new_password_repeat']:
             raise serializers.ValidationError(
                 {
-                    'password': 'Password mismatch'
+                    'Password mismatch'
                 }
             )
         return attrs
